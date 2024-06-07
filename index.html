@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./assets/icon.ico" type="image/x-icon">
     <title>Japit cute</title>
 </head>
 
@@ -15,13 +16,14 @@
     <br />
     <br />
 
-    <input type="number" id="range" min="1" max="100" value="100">
+    <div>Size: <span id="size">100</span></div>
+    <input type="range" id="range" min="10" max="100" step="10" value="100">
     <br />
     <br />
 
 
-    <div class="container">
-        <img id="imagePreview" src="./assets/bg.png" class="image">
+    <div class="container" id="container">
+        <img id="imagePreview" src="./assets/januki.png" class="image">
         <div class="overlay">
             <img id="bgg" src="./assets/bg.png" class="image">
         </div>
@@ -29,11 +31,13 @@
 </body>
 
 <script>
+    const container = document.getElementById("container");
     const uploadImage = document.getElementById("uploadImage");
     const download = document.getElementById("download");
     const range = document.getElementById("range");
     const imagePreview = document.getElementById("imagePreview");
     const bgg = document.getElementById("bgg");
+    const size = document.getElementById("size");
 
     uploadImage.addEventListener("change", uploadImageFunction);
     download.addEventListener("click", downloadFunction);
@@ -45,7 +49,8 @@
         reader.readAsDataURL(file);
         reader.onload = function () {
             localStorage.setItem("image", reader.result);
-            document.getElementById("imagePreview").setAttribute("src", localStorage.getItem("image"))
+            imagePreview.setAttribute("src", localStorage.getItem("image"))
+            container.style.backgroundImage = `url(${localStorage.getItem("image")})`;
         };
     }
 
@@ -68,26 +73,65 @@
         }
     }
 
-    // function rangeFunction() {
-    //     imagePreview.style.width = imagePreview.width * (range.value / 100);
-    //     imagePreview.height = imagePreview.height * (range.value / 100);
-    // }
+    function rangeFunction() {
+        size.innerHTML = range.value;
+        imagePreview.style.width = `calc(${range.value} / 100 * 32rem)`;
+    }
+
+    function hasAlpha(file) {
+        return new Promise((resolve, reject) => {
+            let hasAlpha = false;
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            const img = new Image();
+            img.crossOrigin = 'Anonymous';
+            img.onerror = reject;
+            img.onload = function () {
+                canvas.width = img.width;
+                canvas.height = img.height;
+
+                ctx.drawImage(img, 0, 0);
+                const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height).data;
+
+                for (let j = 0; j < imgData.length; j += 4) {
+                    if (imgData[j + 3] < 255) {
+                        hasAlpha = true;
+                        break;
+                    }
+                }
+                resolve(hasAlpha);
+            };
+            img.src = URL.createObjectURL(file);
+        });
+    }
 
 </script>
 
 <style>
+    #imagePreview {
+        width: calc(32rem * 50%);
+        height: auto;
+    }
+
     .container {
         position: relative;
-        width: 50%;
+        width: 32rem;
+        height: 32rem;
         display: flex;
         justify-content: center;
         align-items: center;
+        background-color: #effdee;
+
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
     }
 
     .image {
         display: block;
         width: 100%;
-        height: auto;
+        height: 100%;
     }
 
     .overlay {
@@ -99,11 +143,6 @@
         height: 100%;
         width: 100%;
         opacity: 1;
-    }
-
-    .resize {
-        transform: translate(0, 200%);
-        position: absolute;
     }
 </style>
 
