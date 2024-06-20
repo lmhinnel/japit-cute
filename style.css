@@ -1,0 +1,40 @@
+body {
+    /* padding-top: 1rem; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "メイリオ", Meiryo, Tahoma, Verdana, "ヒラギノ角ゴ Pro W3", "Hiragino Kaku Gothic Pro", Osaka, "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
+}
+
+.input-class {
+    width: 20vw;
+}
+
+.input-class>div {
+    padding-bottom: 6px;
+    display: flex;
+}
+
+.input-class>div>* {
+    flex: 5;
+    text-align: right;
+}
+
+.input-class>div>label {
+    flex: 2;
+    text-align: inherit;
+}
+
+#canvas {
+    border: 1px solid black;
+}
+
+.imgPosition {
+    -webkit-appearance: none;
+    background: #04AA6D;
+}
+
+/* input[type=range][orient=vertical] {
+    -webkit-appearance: slider-vertical;
+} */

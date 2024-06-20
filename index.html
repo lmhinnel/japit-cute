@@ -4,107 +4,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./assets/icon.ico" type="image/x-icon">
     <title>Japit cute</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 
 <body>
-    <input type="file" accept="image/*" id="uploadImage">
-    <br />
-    <br />
-    <button id="download">Download</button>
-    <br />
-    <br />
-
-    <input type="number" id="range" min="1" max="100" value="100">
-    <br />
-    <br />
-
-
-    <div class="container">
-        <img id="imagePreview" src="./assets/bg.png" class="image">
-        <div class="overlay">
-            <img id="bgg" src="./assets/bg.png" class="image">
+    <h1>Frame image with no credit hehe</h1>
+    <div class="input-class">
+        <div>
+            <label for="frame">Frame Image:</label>
+            <input type="file" id="frame" value="" accept="image/*">
+        </div>
+        <div>
+            <label for="avatar">Avatar Image:</label>
+            <input type="file" id="avatar" accept="image/*">
+        </div>
+        <div>
+            <label for="size">Size (pixels):</label>
+            <input type="number" id="size" value="720" min="180" max="2048">
+        </div>
+        <div>
+            <label for="bgColour">Background:</label>
+            <input type="color" id="bgColour" value="#effdee">
+        </div>
+        <div>
+            <label></label>
+            <div style="margin-left: -1rem;">
+                <input type="checkbox" id="bgImage" name="bgImage" />
+                <label for="bgImage">アバターをバックグラウンドイメージとして使用する</label>
+            </div>
+        </div>
+        <div>
+            <label for="avatarScale">Scale: <span id="avatarScaleValue">1</span>x</label>
+            <input type="range" list="tickmarks" min="0.1" max="3" value="1" step="0.1" id="avatarScale">
+            <datalist id="tickmarks">
+                <option value="0.1"></option>
+                <option value="0.5"></option>
+                <option value="1"></option>
+                <option value="1.5"></option>
+                <option value="2"></option>
+                <option value="2.5"></option>
+                <option value="3"></option>
+            </datalist>
         </div>
     </div>
+
+    <div style="margin-bottom: 1rem;">
+        <button id="buttDownload">🔽 Download 🔽</button>
+    </div>
+
+    <div class="imgContainer">
+        <div>
+            <canvas id="canvas" width="720" height="720"></canvas>
+            </canvas>
+            <!-- <input type="range" min="-50" max="50" value="0" step="1" class="imgPosition" id="imgPositionY"
+                style="transform: rotate(90deg);"> -->
+        </div>
+        <!-- <input type="range" min="-50" max="50" value="0" step="1" class="imgPosition" id="imgPositionX"> -->
+    </div>
+    <script src="script.js"></script>
 </body>
-
-<script>
-    const uploadImage = document.getElementById("uploadImage");
-    const download = document.getElementById("download");
-    const range = document.getElementById("range");
-    const imagePreview = document.getElementById("imagePreview");
-    const bgg = document.getElementById("bgg");
-
-    uploadImage.addEventListener("change", uploadImageFunction);
-    download.addEventListener("click", downloadFunction);
-    range.addEventListener("change", rangeFunction);
-
-    function uploadImageFunction() {
-        const file = document.querySelector('#uploadImage').files[0];
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-            localStorage.setItem("image", reader.result);
-            document.getElementById("imagePreview").setAttribute("src", localStorage.getItem("image"))
-        };
-    }
-
-    function downloadFunction() {
-        const image = document.getElementById("imagePreview");
-        const canvas = document.createElement("canvas");
-
-        const bg = new Image();
-        bg.src = "./assets/bg.png";
-        bg.onload = function () {
-            canvas.width = bg.width;
-            canvas.height = bg.height;
-            const context = canvas.getContext("2d");
-            context.drawImage(document.getElementById("imagePreview"), 0, 0, bg.width, bg.height);
-            context.drawImage(bg, 0, 0);
-            const a = document.createElement("a");
-            a.download = "japitCute.png";
-            a.href = canvas.toDataURL("image/png");
-            a.click();
-        }
-    }
-
-    // function rangeFunction() {
-    //     imagePreview.style.width = imagePreview.width * (range.value / 100);
-    //     imagePreview.height = imagePreview.height * (range.value / 100);
-    // }
-
-</script>
-
-<style>
-    .container {
-        position: relative;
-        width: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-
-    .image {
-        display: block;
-        width: 100%;
-        height: auto;
-    }
-
-    .overlay {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 100%;
-        width: 100%;
-        opacity: 1;
-    }
-
-    .resize {
-        transform: translate(0, 200%);
-        position: absolute;
-    }
-</style>
 
 </html>
